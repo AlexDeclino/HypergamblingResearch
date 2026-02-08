@@ -5,6 +5,10 @@ var ENTRIES_DATA = [
   },
   {
     "type": "image",
+    "src": "content/cover.jpg"
+  },
+  {
+    "type": "image",
     "src": "content/eumap.png"
   },
   {
