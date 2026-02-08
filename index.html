@@ -1,0 +1,95 @@
+<HTML>
+<HEAD>
+<TITLE>HYPERGAMBLING RESEARCH</TITLE>
+<STYLE>
+BODY { margin: 0; padding: 0 25px; }
+TABLE { border-collapse: collapse; border-spacing: 0; }
+TD.divider { height: 2px; font-size: 0; line-height: 0; }
+IMG { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
+VIDEO { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
+A { color: #DDDDDD; text-decoration: underline; }
+A:visited { color: #DDDDDD; }
+A:hover { color: #FFFF00; }
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FF0000" ALINK=#DDDDDD VLINK=#DDDDDD LINK=#DDDDDD>
+<CENTER>
+
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 STYLE="position: fixed; top: 0; left: 0; right: 0; z-index: 999;">
+<TR><TD BGCOLOR=#000000 ALIGN=CENTER STYLE="padding: 16px 0;">
+<FONT FACE="Courier New,Courier" COLOR="#FFFFFF" SIZE=+1><B>
+HYPERGAMBLING RESEARCH
+</B></FONT>
+</TABLE>
+<!-- Spacer to push content below fixed header -->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0><TR><TD STYLE="height: 77px;"></TABLE>
+
+<DIV ID="entries"></DIV>
+
+</CENTER>
+
+<SCRIPT SRC="entries.js"></SCRIPT>
+<SCRIPT>
+function needsDivider(prevType, currType) {
+  var dividerTypes = ['text', 'link'];
+  return dividerTypes.indexOf(prevType) !== -1 && dividerTypes.indexOf(currType) !== -1;
+}
+
+function escapeHTML(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+function renderEntries(entries) {
+  var container = document.getElementById('entries');
+  var html = '';
+  var prevType = null;
+
+  for (var i = 0; i < entries.length; i++) {
+    var entry = entries[i];
+
+    if (prevType !== null && needsDivider(prevType, entry.type)) {
+      html += '<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0><TR><TD CLASS="divider" BGCOLOR=#000000></TABLE>\n';
+    }
+
+    if (entry.type === 'text') {
+      html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#333333>';
+      html += '<FONT FACE="Arial" SIZE=-1 COLOR=#DDDDDD>';
+      html += '<B>' + escapeHTML(entry.content).replace(/\n/g, '<BR>') + '</B>';
+      html += '</FONT>';
+      html += '</TABLE>\n';
+    } else if (entry.type === 'image') {
+      html += '<IMG SRC="' + escapeHTML(entry.src) + '" STYLE="pointer-events: auto;">\n';
+    } else if (entry.type === 'video') {
+      html += '<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#000000 ALIGN=CENTER>';
+      html += '<VIDEO CONTROLS WIDTH=100%>';
+      html += '<SOURCE SRC="' + escapeHTML(entry.src) + '" TYPE="video/mp4">';
+      html += '</VIDEO>';
+      html += '</TABLE>\n';
+    } else if (entry.type === 'link') {
+      html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#333333 ALIGN=CENTER>';
+      html += '<FONT FACE="Arial" COLOR=#DDDDDD SIZE=+1><B>';
+      html += '<A HREF="' + escapeHTML(entry.url) + '">' + escapeHTML(entry.title) + '</A>';
+      html += '</B></FONT>';
+      html += '<FONT FACE="Arial" SIZE=-1 COLOR=#DDDDDD><BR>';
+      html += '<B>' + escapeHTML(entry.description) + '</B>';
+      html += '</FONT>';
+      html += '</TABLE>\n';
+    }
+
+    prevType = entry.type;
+  }
+
+  container.innerHTML = html;
+}
+
+if (typeof ENTRIES_DATA !== 'undefined') {
+  renderEntries(ENTRIES_DATA);
+}
+</SCRIPT>
+</BODY>
+</HTML>
