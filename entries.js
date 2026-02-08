@@ -22,5 +22,17 @@ var ENTRIES_DATA = [
   {
     "type": "video",
     "src": "content/sybil2.mp4"
+  },
+  {
+    "type": "link",
+    "title": "IAN CHENG'S BIKEY",
+    "description": "literary style I would use",
+    "url": "https://www.ribbonfarm.com/2019/06/18/worlding-raga-6-world-to-live/"
+  },
+  {
+    "type": "link",
+    "title": "THE POACHER",
+    "description": "Something",
+    "url": "https://hypergambling.declino.systems/content/poacher.pdf"
   }
 ];
