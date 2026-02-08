@@ -34,5 +34,13 @@ var ENTRIES_DATA = [
     "title": "THE POACHER",
     "description": "Something",
     "url": "https://hypergambling.declino.systems/content/poacher.pdf"
+  },
+  {
+    "type": "text",
+    "content": "IMA SCROBBLER HONEY. WE SCROBBLE ALBUMS ELECTRONICALLTY SO THE\nNUMBERS GO UP"
+  },
+  {
+    "type": "image",
+    "src": "content/map.png"
   }
 ];

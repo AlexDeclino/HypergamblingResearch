@@ -68,7 +68,7 @@ function toggleMute() {
   var videos = document.querySelectorAll('video');
   for (var i = 0; i < videos.length; i++) videos[i].muted = isMuted;
   var btns = document.querySelectorAll('.mute-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].textContent = isMuted ? 'UNMUTE ALL' : 'MUTE ALL';
+  for (var i = 0; i < btns.length; i++) btns[i].textContent = isMuted ? 'UNMUTE' : 'MUTE';
 }
 
 function renderEntries(entries) {
@@ -100,8 +100,8 @@ function renderEntries(entries) {
       html += '<DIV CLASS="play-overlay video-label" STYLE="position:absolute;top:8px;left:8px;pointer-events:none;background:#333333;padding:4px 8px">';
       html += 'TAP TO PLAY/PAUSE';
       html += '</DIV>';
-      html += '<DIV CLASS="mute-btn video-label" ONCLICK="event.stopPropagation();toggleMute()" STYLE="position:absolute;top:40px;left:8px;cursor:pointer;pointer-events:auto;background:#333333;padding:4px 8px">';
-      html += (isMuted ? 'UNMUTE ALL' : 'MUTE ALL');
+      html += '<DIV CLASS="mute-btn video-label" ONCLICK="event.stopPropagation();toggleMute()" STYLE="position:absolute;top:8px;right:8px;cursor:pointer;pointer-events:auto;background:#333333;padding:4px 8px">';
+      html += (isMuted ? 'UNMUTE' : 'MUTE');
       html += '</DIV>';
       html += '</DIV>\n';
     } else if (entry.type === 'keyword') {
