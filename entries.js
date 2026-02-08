@@ -74,11 +74,27 @@ var ENTRIES_DATA = [
     "content": "A POTLACH BETWEEN THE INDIVIDUAL AND THE SYSTEM"
   },
   {
+    "type": "text",
+    "content": "Dice & Wagers (Mesopotamia, 3000 BCE) Playing Cards (China, 900 CE) Stock Exchanges (Amsterdam, 1602) Slot Machines (USA, 1894) Derivatives Trading (Chicago, 1973) Online Poker (1990s) Crypto Exchanges (2015) Money Console (DEGN, 2025)"
+  },
+  {
     "type": "video",
     "src": "content/device.mp4"
   },
   {
     "type": "text",
-    "content": "Dice & Wagers (Mesopotamia, 3000 BCE) Playing Cards (China, 900 CE) Stock Exchanges (Amsterdam, 1602) Slot Machines (USA, 1894) Derivatives Trading (Chicago, 1973) Online Poker (1990s) Crypto Exchanges (2015) Money Console (DEGN, 2025)"
+    "content": "We've become both the gamblers and the house, the product and the consumer. This creates a new form of labor: users working for free to generate their own dopamine hits. Users working via incentives for outsized positions."
+  },
+  {
+    "type": "keyword",
+    "content": "a world where dopamine hits drive real market momentum"
+  },
+  {
+    "type": "image",
+    "src": "content/snake.png"
+  },
+  {
+    "type": "image",
+    "src": "content/digger.jpg"
   }
 ];
