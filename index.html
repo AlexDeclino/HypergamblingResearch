@@ -11,6 +11,8 @@ VIDEO { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
 A { color: #DDDDDD; text-decoration: underline; }
 A:visited { color: #DDDDDD; }
 A:hover { color: #FFFF00; }
+.video-label { font-family: Courier New, Courier; color: #DDDDDD; font-weight: bold; font-size: 16px; }
+@media (max-width: 600px) { .video-label { font-size: 9px; } }
 </STYLE>
 </HEAD>
 <BODY BGCOLOR="#FF0000" ALINK=#DDDDDD VLINK=#DDDDDD LINK=#DDDDDD>
@@ -65,8 +67,8 @@ function toggleMute() {
   isMuted = !isMuted;
   var videos = document.querySelectorAll('video');
   for (var i = 0; i < videos.length; i++) videos[i].muted = isMuted;
-  var btns = document.querySelectorAll('.mute-btn font');
-  for (var i = 0; i < btns.length; i++) btns[i].innerHTML = '<b>' + (isMuted ? 'UNMUTE ALL' : 'MUTE ALL') + '</b>';
+  var btns = document.querySelectorAll('.mute-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].textContent = isMuted ? 'UNMUTE ALL' : 'MUTE ALL';
 }
 
 function renderEntries(entries) {
@@ -95,11 +97,11 @@ function renderEntries(entries) {
       html += '<VIDEO PLAYSINLINE WEBKIT-PLAYSINLINE PRELOAD="metadata" WIDTH=100% STYLE="display:block">';
       html += '<SOURCE SRC="' + escapeHTML(entry.src) + '#t=0.001" TYPE="video/mp4">';
       html += '</VIDEO>';
-      html += '<DIV CLASS="play-overlay" STYLE="position:absolute;top:8px;left:8px;pointer-events:none;background:#333333;padding:4px 8px">';
-      html += '<FONT FACE="Courier New,Courier" COLOR="#DDDDDD" SIZE=+1><B>TAP TO PLAY/PAUSE</B></FONT>';
+      html += '<DIV CLASS="play-overlay video-label" STYLE="position:absolute;top:8px;left:8px;pointer-events:none;background:#333333;padding:4px 8px">';
+      html += 'TAP TO PLAY/PAUSE';
       html += '</DIV>';
-      html += '<DIV CLASS="mute-btn" ONCLICK="event.stopPropagation();toggleMute()" STYLE="position:absolute;top:40px;left:8px;cursor:pointer;pointer-events:auto;background:#333333;padding:4px 8px">';
-      html += '<FONT FACE="Courier New,Courier" COLOR="#DDDDDD" SIZE=+1><B>' + (isMuted ? 'UNMUTE ALL' : 'MUTE ALL') + '</B></FONT>';
+      html += '<DIV CLASS="mute-btn video-label" ONCLICK="event.stopPropagation();toggleMute()" STYLE="position:absolute;top:40px;left:8px;cursor:pointer;pointer-events:auto;background:#333333;padding:4px 8px">';
+      html += (isMuted ? 'UNMUTE ALL' : 'MUTE ALL');
       html += '</DIV>';
       html += '</DIV>\n';
     } else if (entry.type === 'keyword') {
