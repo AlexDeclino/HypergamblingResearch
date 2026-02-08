@@ -53,6 +53,7 @@ h1 { text-align: center; margin-bottom: 20px; color: #ff0000; font-family: 'Cour
   font-weight: bold; text-transform: uppercase; margin-right: 6px; flex-shrink: 0;
 }
 .type-text .type-badge { background: #457b9d; }
+.type-keyword .type-badge { background: #e63946; }
 .type-image .type-badge { background: #2a9d8f; }
 .type-video .type-badge { background: #e9c46a; color: #333; }
 .type-link .type-badge { background: #e76f51; }
@@ -105,6 +106,7 @@ h1 { text-align: center; margin-bottom: 20px; color: #ff0000; font-family: 'Cour
       <label>Type</label>
       <select id="entryType" onchange="updateFormFields()">
         <option value="text">Text</option>
+        <option value="keyword">Keyword</option>
         <option value="image">Image</option>
         <option value="video">Video</option>
         <option value="link">Link</option>
@@ -148,10 +150,12 @@ function updateFormFields() {
   var html = '';
   if (type === 'text') {
     html = '<label>Content</label><textarea id="fieldContent" placeholder="Enter text content..."></textarea>';
+  } else if (type === 'keyword') {
+    html = '<label>Keyword</label><input id="fieldContent" placeholder="Enter keyword...">';
   } else if (type === 'image') {
-    html = '<label>Image Path</label><input id="fieldSrc" placeholder="content/img.png">';
+    html = '<label>Filename</label><input id="fieldSrc" placeholder="img.png">';
   } else if (type === 'video') {
-    html = '<label>Video Path</label><input id="fieldSrc" placeholder="content/vid.mp4">';
+    html = '<label>Filename</label><input id="fieldSrc" placeholder="vid.mp4">';
   } else if (type === 'link') {
     html = '<label>Title</label><input id="fieldTitle" placeholder="LINK TITLE">';
     html += '<label>Description</label><input id="fieldDesc" placeholder="A short description">';
@@ -165,14 +169,14 @@ function buildEntryFromForm() {
   var type = document.getElementById('entryType').value;
   var entry = { type: type };
 
-  if (type === 'text') {
+  if (type === 'text' || type === 'keyword') {
     var content = document.getElementById('fieldContent').value.trim();
     if (!content) return null;
     entry.content = content;
   } else if (type === 'image' || type === 'video') {
     var src = document.getElementById('fieldSrc').value.trim();
     if (!src) return null;
-    entry.src = src;
+    entry.src = 'content/' + src;
   } else if (type === 'link') {
     var title = document.getElementById('fieldTitle').value.trim();
     var desc = document.getElementById('fieldDesc').value.trim();
@@ -210,10 +214,10 @@ function editEntry(index) {
   select.disabled = true;
   updateFormFields();
 
-  if (entry.type === 'text') {
+  if (entry.type === 'text' || entry.type === 'keyword') {
     document.getElementById('fieldContent').value = entry.content;
   } else if (entry.type === 'image' || entry.type === 'video') {
-    document.getElementById('fieldSrc').value = entry.src;
+    document.getElementById('fieldSrc').value = entry.src.replace(/^content\//, '');
   } else if (entry.type === 'link') {
     document.getElementById('fieldTitle').value = entry.title;
     document.getElementById('fieldDesc').value = entry.description || '';
@@ -290,7 +294,7 @@ function escapeHTML(str) {
 }
 
 function entryLabel(entry) {
-  if (entry.type === 'text') return entry.content.length > 80 ? entry.content.substring(0, 80) + '...' : entry.content;
+  if (entry.type === 'text' || entry.type === 'keyword') return entry.content.length > 80 ? entry.content.substring(0, 80) + '...' : entry.content;
   if (entry.type === 'image') return entry.src;
   if (entry.type === 'video') return entry.src;
   if (entry.type === 'link') return entry.title + ' - ' + entry.url;
@@ -318,7 +322,7 @@ function renderList() {
 }
 
 function needsDivider(prevType, currType) {
-  var d = ['text', 'link'];
+  var d = ['text', 'link', 'keyword'];
   return d.indexOf(prevType) !== -1 && d.indexOf(currType) !== -1;
 }
 
@@ -339,6 +343,12 @@ function renderPreview() {
       html += '<tr><td bgcolor="#333333">';
       html += '<font face="Arial" size="-1" color="#DDDDDD">';
       html += '<b>' + escapeHTML(entry.content).replace(/\n/g, '<br>') + '</b>';
+      html += '</font></td></tr></table>';
+    } else if (entry.type === 'keyword') {
+      html += '<table width="100%" cellpadding="8" cellspacing="0">';
+      html += '<tr><td bgcolor="#333333" align="center">';
+      html += '<font face="Courier New,Courier" color="#FF0000" size="+2">';
+      html += '<b>' + escapeHTML(entry.content) + '</b>';
       html += '</font></td></tr></table>';
     } else if (entry.type === 'image') {
       html += '<img src="' + escapeHTML(entry.src) + '" style="pointer-events:auto;">';

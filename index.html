@@ -1,5 +1,6 @@
 <HTML>
 <HEAD>
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1">
 <TITLE>HYPERGAMBLING RESEARCH</TITLE>
 <STYLE>
 BODY { margin: 0; padding: 0 25px; }
@@ -31,7 +32,7 @@ HYPERGAMBLING RESEARCH
 <SCRIPT SRC="entries.js"></SCRIPT>
 <SCRIPT>
 function needsDivider(prevType, currType) {
-  var dividerTypes = ['text', 'link'];
+  var dividerTypes = ['text', 'link', 'keyword'];
   return dividerTypes.indexOf(prevType) !== -1 && dividerTypes.indexOf(currType) !== -1;
 }
 
@@ -68,6 +69,13 @@ function renderEntries(entries) {
       html += '<VIDEO CONTROLS PLAYSINLINE WEBKIT-PLAYSINLINE WIDTH=100%>';
       html += '<SOURCE SRC="' + escapeHTML(entry.src) + '" TYPE="video/mp4">';
       html += '</VIDEO>';
+      html += '</TABLE>\n';
+    } else if (entry.type === 'keyword') {
+      html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#333333 ALIGN=CENTER>';
+      html += '<FONT FACE="Courier New,Courier" COLOR=#FF0000 SIZE=+2>';
+      html += '<B>' + escapeHTML(entry.content).replace(/\n/g, '<BR>') + '</B>';
+      html += '</FONT>';
       html += '</TABLE>\n';
     } else if (entry.type === 'link') {
       html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
