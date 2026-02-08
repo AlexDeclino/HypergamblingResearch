@@ -42,6 +42,33 @@ function escapeHTML(str) {
   return div.innerHTML;
 }
 
+var isMuted = false;
+
+function pauseAllExcept(current) {
+  var wrappers = document.querySelectorAll('.video-wrap');
+  for (var i = 0; i < wrappers.length; i++) {
+    var v = wrappers[i].querySelector('video');
+    if (v !== current && !v.paused) {
+      v.pause();
+    }
+  }
+}
+
+function videoTap(container) {
+  var v = container.querySelector('video');
+  var o = container.querySelector('.play-overlay');
+  if (v.paused) { pauseAllExcept(v); v.muted = isMuted; v.play(); }
+  else { v.pause(); }
+}
+
+function toggleMute() {
+  isMuted = !isMuted;
+  var videos = document.querySelectorAll('video');
+  for (var i = 0; i < videos.length; i++) videos[i].muted = isMuted;
+  var btns = document.querySelectorAll('.mute-btn font');
+  for (var i = 0; i < btns.length; i++) btns[i].innerHTML = '<b>' + (isMuted ? 'UNMUTE ALL' : 'MUTE ALL') + '</b>';
+}
+
 function renderEntries(entries) {
   var container = document.getElementById('entries');
   var html = '';
@@ -64,12 +91,17 @@ function renderEntries(entries) {
     } else if (entry.type === 'image') {
       html += '<IMG SRC="' + escapeHTML(entry.src) + '" STYLE="pointer-events: auto;">\n';
     } else if (entry.type === 'video') {
-      html += '<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0>';
-      html += '<TR><TD BGCOLOR=#000000 ALIGN=CENTER>';
-      html += '<VIDEO CONTROLS PLAYSINLINE WEBKIT-PLAYSINLINE WIDTH=100%>';
-      html += '<SOURCE SRC="' + escapeHTML(entry.src) + '" TYPE="video/mp4">';
+      html += '<DIV CLASS="video-wrap" STYLE="position:relative;cursor:pointer" ONCLICK="videoTap(this)">';
+      html += '<VIDEO PLAYSINLINE WEBKIT-PLAYSINLINE PRELOAD="metadata" WIDTH=100% STYLE="display:block">';
+      html += '<SOURCE SRC="' + escapeHTML(entry.src) + '#t=0.001" TYPE="video/mp4">';
       html += '</VIDEO>';
-      html += '</TABLE>\n';
+      html += '<DIV CLASS="play-overlay" STYLE="position:absolute;top:8px;left:8px;pointer-events:none;background:#333333;padding:4px 8px">';
+      html += '<FONT FACE="Courier New,Courier" COLOR="#DDDDDD" SIZE=+1><B>TAP TO PLAY/PAUSE</B></FONT>';
+      html += '</DIV>';
+      html += '<DIV CLASS="mute-btn" ONCLICK="event.stopPropagation();toggleMute()" STYLE="position:absolute;top:40px;left:8px;cursor:pointer;pointer-events:auto;background:#333333;padding:4px 8px">';
+      html += '<FONT FACE="Courier New,Courier" COLOR="#DDDDDD" SIZE=+1><B>' + (isMuted ? 'UNMUTE ALL' : 'MUTE ALL') + '</B></FONT>';
+      html += '</DIV>';
+      html += '</DIV>\n';
     } else if (entry.type === 'keyword') {
       html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
       html += '<TR><TD BGCOLOR=#333333 ALIGN=CENTER>';
