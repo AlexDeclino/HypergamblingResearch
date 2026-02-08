@@ -56,7 +56,7 @@ function renderEntries(entries) {
     if (entry.type === 'text') {
       html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
       html += '<TR><TD BGCOLOR=#333333>';
-      html += '<FONT FACE="Arial" SIZE=-1 COLOR=#DDDDDD>';
+      html += '<FONT FACE="Courier New,Courier" COLOR=#DDDDDD>';
       html += '<B>' + escapeHTML(entry.content).replace(/\n/g, '<BR>') + '</B>';
       html += '</FONT>';
       html += '</TABLE>\n';
@@ -65,17 +65,17 @@ function renderEntries(entries) {
     } else if (entry.type === 'video') {
       html += '<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0>';
       html += '<TR><TD BGCOLOR=#000000 ALIGN=CENTER>';
-      html += '<VIDEO CONTROLS WIDTH=100%>';
+      html += '<VIDEO CONTROLS PLAYSINLINE WEBKIT-PLAYSINLINE WIDTH=100%>';
       html += '<SOURCE SRC="' + escapeHTML(entry.src) + '" TYPE="video/mp4">';
       html += '</VIDEO>';
       html += '</TABLE>\n';
     } else if (entry.type === 'link') {
       html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
       html += '<TR><TD BGCOLOR=#333333 ALIGN=CENTER>';
-      html += '<FONT FACE="Arial" COLOR=#DDDDDD SIZE=+1><B>';
+      html += '<FONT FACE="Courier New,Courier" COLOR=#DDDDDD SIZE=+1><B>';
       html += '<A HREF="' + escapeHTML(entry.url) + '">' + escapeHTML(entry.title) + '</A>';
       html += '</B></FONT>';
-      html += '<FONT FACE="Arial" SIZE=-1 COLOR=#DDDDDD><BR>';
+      html += '<FONT FACE="Courier New,Courier" SIZE=-1 COLOR=#DDDDDD><BR>';
       html += '<B>' + escapeHTML(entry.description) + '</B>';
       html += '</FONT>';
       html += '</TABLE>\n';
