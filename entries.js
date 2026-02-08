@@ -1,7 +1,7 @@
 var ENTRIES_DATA = [
   {
     "type": "text",
-    "content": "SETTING:\nThe year is 2029\nEurope is ridden by the rubble of war, its map resembles one from 1444 AD.\nA conjuction of sovereign cities, privately owned.\nThe unemployment rate is 99.7%\nYou receive your 700 EU tokens universal basic income from the \"government\"\nthe entire economy is ai data centers and gambling your life savings on real life tragedies and events\nYou have 3 days to gamble it on a prediction market to make your 2,800/mo rent on a Palantir owned studio apartment in the sovereign city of New Neukolln.\nIf you can’t quadruple the money, the government seizes your clothes and send you to be on Season 9 of Beast Games \nThe loser of the season is hunted alive by the elites for sport, live streamed on TikTok.\nThe data is used to train new biological intelligent drones for war."
+    "content": "SETTING:\nThe year is 2029\nEurope is rubble, its map resembles one from 1444 AD.\nA conjuction of sovereign cities, privately owned.\nThe unemployment rate is 99.7%\nYou receive your 700 EU tokens universal basic income from the \"government\"\nthe entire economy is ai data centers and gambling your life savings on real life tragedies and events\nYou have 3 days to gamble it on a prediction market to make your 2,800/mo rent on a Palantir owned studio apartment in the sovereign city of New Neukolln.\nIf you can’t quadruple the money, the government seizes your clothes and send you to be on Season 9 of Beast Games \nThe loser of the season is hunted alive by the elites for sport, live streamed on TikTok.\nThe data is used to train new biological intelligent drones for war."
   },
   {
     "type": "image",
@@ -37,7 +37,7 @@ var ENTRIES_DATA = [
   },
   {
     "type": "text",
-    "content": "We follow SYBIL on his (pronouns tbd) daily trip to survive in this environment."
+    "content": "We follow SYBIL on his daily trip to survive in this environment."
   },
   {
     "type": "link",
@@ -51,7 +51,7 @@ var ENTRIES_DATA = [
   },
   {
     "type": "text",
-    "content": "In a scene he meets someone and define his job like:\n\nIMA SCROBBLER HONEY. \nWE SCROBBLE ALBUMS ELECTRONICALLTY SO THE NUMBERS GO UP"
+    "content": "he meets someone and explains his job:\n\nIMA SCROBBLER HONEY. \nWE SCROBBLE ALBUMS ELECTRONICALLTY SO THE NUMBERS GO UP"
   },
   {
     "type": "image",
