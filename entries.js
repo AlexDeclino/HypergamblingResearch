@@ -5,7 +5,7 @@ var ENTRIES_DATA = [
   },
   {
     "type": "image",
-    "src": "content/cover.jpg"
+    "src": "content/cover.png"
   },
   {
     "type": "image",
