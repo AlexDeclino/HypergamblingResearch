@@ -40,6 +40,10 @@ var ENTRIES_DATA = [
     "content": "We follow SYBIL on his daily trip to survive in this environment."
   },
   {
+    "type": "image",
+    "src": "content/bike.png"
+  },
+  {
     "type": "link",
     "title": "IAN CHENG'S BIKEY",
     "description": "literary style I would like to use",
