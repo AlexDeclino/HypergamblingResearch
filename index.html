@@ -1,327 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Hourglass</title>
-  <style>
-    * { box-sizing: border-box; }
+<HTML>
+<HEAD>
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1">
+<TITLE>HYPERGAMBLING RESEARCH</TITLE>
+<STYLE>
+BODY { margin: 0; padding: 0 25px 40px; }
+TABLE { border-collapse: collapse; border-spacing: 0; }
+TD.divider { height: 2px; font-size: 0; line-height: 0; }
+IMG { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
+VIDEO { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
+A { color: #DDDDDD; text-decoration: underline; }
+A:visited { color: #DDDDDD; }
+A:hover { color: #FFFF00; }
+.video-label { font-family: Courier New, Courier; color: #DDDDDD; font-weight: bold; font-size: 16px; }
+@media (max-width: 600px) { .video-label { font-size: 9px; } }
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FF0000" ALINK=#DDDDDD VLINK=#DDDDDD LINK=#DDDDDD>
+<CENTER>
 
-    body {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 16px;
-      color: #2e2829;
-      background: #fff;
-      margin: 0;
-      overflow: hidden;
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0 STYLE="position: fixed; top: 0; left: 0; right: 0; z-index: 999;">
+<TR><TD BGCOLOR=#000000 ALIGN=CENTER STYLE="padding: 16px 0;">
+<FONT FACE="Courier New,Courier" COLOR="#FFFFFF" SIZE=+1><B>
+HYPERGAMBLING RESEARCH
+</B></FONT>
+</TABLE>
+<!-- Spacer to push content below fixed header -->
+<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0><TR><TD STYLE="height: 77px;"></TABLE>
+
+<DIV ID="entries"></DIV>
+
+</CENTER>
+
+<SCRIPT SRC="entries.js"></SCRIPT>
+<SCRIPT>
+function needsDivider(prevType, currType) {
+  var dividerTypes = ['text', 'link', 'keyword'];
+  return dividerTypes.indexOf(prevType) !== -1 && dividerTypes.indexOf(currType) !== -1;
+}
+
+function escapeHTML(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+var isMuted = false;
+
+function pauseAllExcept(current) {
+  var wrappers = document.querySelectorAll('.video-wrap');
+  for (var i = 0; i < wrappers.length; i++) {
+    var v = wrappers[i].querySelector('video');
+    if (v !== current && !v.paused) {
+      v.pause();
+    }
+  }
+}
+
+function videoTap(container) {
+  var v = container.querySelector('video');
+  var o = container.querySelector('.play-overlay');
+  if (v.paused) { pauseAllExcept(v); v.muted = isMuted; v.play(); }
+  else { v.pause(); }
+}
+
+function toggleMute() {
+  isMuted = !isMuted;
+  var videos = document.querySelectorAll('video');
+  for (var i = 0; i < videos.length; i++) videos[i].muted = isMuted;
+  var btns = document.querySelectorAll('.mute-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].textContent = isMuted ? 'UNMUTE' : 'MUTE';
+}
+
+function renderEntries(entries) {
+  var container = document.getElementById('entries');
+  var html = '';
+  var prevType = null;
+
+  for (var i = 0; i < entries.length; i++) {
+    var entry = entries[i];
+
+    if (prevType !== null && needsDivider(prevType, entry.type)) {
+      html += '<TABLE WIDTH=100% CELLPADDING=0 CELLSPACING=0><TR><TD CLASS="divider" BGCOLOR=#000000></TABLE>\n';
     }
 
-    /* Header — fixed to top */
-    .header-section {
-      position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 680px;
-      background: #fff;
-      border-bottom: 1px solid #2e2829;
-      padding: 0 2em;
-      z-index: 10;
+    if (entry.type === 'text') {
+      html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#333333>';
+      html += '<FONT FACE="Courier New,Courier" COLOR=#DDDDDD>';
+      html += '<B>' + escapeHTML(entry.content).replace(/\n/g, '<BR>') + '</B>';
+      html += '</FONT>';
+      html += '</TABLE>\n';
+    } else if (entry.type === 'image') {
+      html += '<IMG SRC="' + escapeHTML(entry.src) + '" STYLE="pointer-events: auto;">\n';
+    } else if (entry.type === 'video') {
+      html += '<DIV CLASS="video-wrap" STYLE="position:relative;cursor:pointer" ONCLICK="videoTap(this)">';
+      html += '<VIDEO PLAYSINLINE WEBKIT-PLAYSINLINE PRELOAD="metadata" WIDTH=100% STYLE="display:block">';
+      html += '<SOURCE SRC="' + escapeHTML(entry.src) + '#t=0.001" TYPE="video/mp4">';
+      html += '</VIDEO>';
+      html += '<DIV CLASS="play-overlay video-label" STYLE="position:absolute;top:8px;left:8px;pointer-events:none;background:#333333;padding:4px 8px">';
+      html += 'TAP TO PLAY/PAUSE';
+      html += '</DIV>';
+      html += '<DIV CLASS="mute-btn video-label" ONCLICK="event.stopPropagation();toggleMute()" STYLE="position:absolute;top:8px;right:8px;cursor:pointer;pointer-events:auto;background:#333333;padding:4px 8px">';
+      html += (isMuted ? 'UNMUTE' : 'MUTE');
+      html += '</DIV>';
+      html += '</DIV>\n';
+    } else if (entry.type === 'keyword') {
+      html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#333333 ALIGN=CENTER>';
+      html += '<FONT FACE="Courier New,Courier" COLOR=#FF0000 SIZE=+2>';
+      html += '<B>' + escapeHTML(entry.content).replace(/\n/g, '<BR>') + '</B>';
+      html += '</FONT>';
+      html += '</TABLE>\n';
+    } else if (entry.type === 'link') {
+      html += '<TABLE WIDTH=100% CELLPADDING=8 CELLSPACING=0>';
+      html += '<TR><TD BGCOLOR=#333333 ALIGN=CENTER>';
+      html += '<FONT FACE="Courier New,Courier" COLOR=#DDDDDD SIZE=+1><B>';
+      html += '<A HREF="' + escapeHTML(entry.url) + '">' + escapeHTML(entry.title) + '</A>';
+      html += '</B></FONT>';
+      html += '<FONT FACE="Courier New,Courier" SIZE=-1 COLOR=#DDDDDD><BR>';
+      html += '<B>' + escapeHTML(entry.description) + '</B>';
+      html += '</FONT>';
+      html += '</TABLE>\n';
     }
 
-    /* Snap scroll content area */
-    .content-area {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 680px;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scrollbar-width: none;
-    }
+    prevType = entry.type;
+  }
 
-    .content-area::-webkit-scrollbar {
-      display: none;
-    }
+  container.innerHTML = html;
+}
 
-    #entries p {
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 2em 2em 0;
-      margin: 0;
-      line-height: 24.1px;
-      white-space: pre-wrap;
-      text-indent: 0;
-    }
-
-    /* Input section — fixed to bottom */
-    .input-section {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 680px;
-      background: #fff;
-      border-top: 1px solid #2e2829;
-      padding: 1em 2em 1.5em;
-      z-index: 10;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 16px;
-      color: #2e2829;
-      border: 1px solid #ccc;
-      padding: 0.75em 1em;
-      resize: vertical;
-      box-sizing: border-box;
-      line-height: 24.1px;
-      outline: none;
-    }
-
-    textarea:focus {
-      border-color: #2e2829;
-    }
-
-    button {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 14px;
-      color: #2e2829;
-      background: none;
-      border: 1px solid #2e2829;
-      padding: 0.4em 1.2em;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #2e2829;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- Fixed header -->
-  <div class="header-section" id="header">
-    <img id="header-img" src="images/batch_path1_header_.png" alt="The Hourglass" style="height: 80px; display: block; margin: 0 auto;">
-    <p id="header-word" style="text-align:center; text-indent:0; margin: 0.25em 0 0.5em; font-size:14px; letter-spacing:0.15em; min-height:1.2em;">GAMBLING</p>
-  </div>
-
-  <!-- Snap scroll content -->
-  <div class="content-area" id="content-area">
-    <div id="entries"></div>
-  </div>
-
-  <!-- Fixed input -->
-  <div class="input-section" id="input-section">
-    <textarea id="entry-input" placeholder="humans are wired for gambling..."></textarea>
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75em;">
-      <button onclick="wipeEntries()" style="color:#999; border-color:#ccc;">Wipe all</button>
-      <div style="display:flex; gap:0.5em; align-items:center;">
-        <select id="username-select" style="font-family:'Times New Roman',serif; font-size:14px; color:#2e2829; border:1px solid #2e2829; padding:0.4em 0.5em; background:#fff; cursor:pointer; outline:none;">
-          <option value="random">random</option>
-        </select>
-        <button onclick="submitEntry()">Submit</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function adjustLayout() {
-      const headerHeight = document.getElementById('header').offsetHeight;
-      const inputHeight = document.getElementById('input-section').offsetHeight;
-      const contentHeight = window.innerHeight - headerHeight - inputHeight;
-      const area = document.getElementById('content-area');
-      area.style.top = headerHeight + 'px';
-      area.style.height = contentHeight + 'px';
-      document.querySelectorAll('#entries p').forEach(p => {
-        p.style.height = contentHeight + 'px';
-      });
-    }
-
-    adjustLayout();
-    window.addEventListener('resize', adjustLayout);
-
-    var usernames = [];
-    fetch('usernames2.txt').then(function(r){ return r.text(); }).then(function(t){
-      usernames = t.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
-      const sel = document.getElementById('username-select');
-      usernames.forEach(function(u) {
-        const opt = document.createElement('option');
-        opt.value = u;
-        opt.textContent = u;
-        sel.appendChild(opt);
-      });
-    });
-
-    function getSelectedUsername() {
-      const sel = document.getElementById('username-select');
-      if (sel.value === 'random') {
-        if (!usernames.length) return '';
-        return usernames[Math.floor(Math.random() * usernames.length)];
-      }
-      return sel.value;
-    }
-
-    // Cycle header images
-    const headerImages = [
-      'images/batch_path1_header_.png',
-      'images/batch_path2_header_.png',
-      'images/batch_path3_header_.png',
-      'images/batch_path4_header_.png',
-      'images/batch_path5_header_.png',
-      'images/batch_path6_header_.png',
-      'images/batch_path7_header_.png',
-      'images/batch_path8_header_.png',
-      'images/batch_path9_header_.png',
-      'images/batch_path10_header_.png',
-      'images/batch_path11_header_.png',
-      'images/batch_path12_header_.png',
-      'images/batch_path13_header_.png',
-      'images/batch_path14_header_.png',
-      'images/batch_path15_header_.png',
-      'images/batch_path16_header_.png',
-      'images/batch_path17_header_.png',
-      'images/batch_path18_header_.png',
-      'images/batch_path19_header_.png',
-    ];
-    let headerIndex = 0;
-    setInterval(function() {
-      headerIndex = (headerIndex + 1) % headerImages.length;
-      document.getElementById('header-img').src = headerImages[headerIndex];
-    }, 50);
-
-    // Word cycling animation
-    const words = ['GAMBLING', 'CAPITAL', 'GAINZ', 'FLOW', 'PLEASURE'];
-    let wordIndex = 0;
-    const letterDelay = 80;
-
-    function animateWord() {
-      const el = document.getElementById('header-word');
-      const current = words[wordIndex];
-      const next = words[(wordIndex + 1) % words.length];
-
-      let step = current.length;
-      const remove = setInterval(function() {
-        step--;
-        el.textContent = current.slice(0, step);
-        if (step <= 0) {
-          clearInterval(remove);
-          let add = 0;
-          const build = setInterval(function() {
-            add++;
-            el.textContent = next.slice(0, add);
-            if (add >= next.length) {
-              clearInterval(build);
-              wordIndex = (wordIndex + 1) % words.length;
-            }
-          }, letterDelay);
-        }
-      }, letterDelay);
-    }
-
-    setInterval(animateWord, 5000);
-    new ResizeObserver(adjustLayout).observe(document.getElementById('input-section'));
-
-    function makeStamp() {
-      const now = new Date();
-      const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-      const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-      function ordinal(n) {
-        const s = ['th','st','nd','rd'], v = n % 100;
-        return n + (s[(v - 20) % 10] || s[v] || s[0]);
-      }
-      const utc1 = now.getUTCHours() * 3600 + now.getUTCMinutes() * 60 + now.getUTCSeconds() + 3600;
-      const beats = ((utc1 % 86400) / 86.4).toFixed(2);
-      const year = now.getUTCFullYear() + 5;
-      const u = getSelectedUsername();
-      const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
-      const dd = String(now.getUTCDate()).padStart(2, '0');
-      const dateLine = mm + '/' + dd + '/' + year + ' @ ' + String(Math.floor(beats)).padStart(3, '0') + '.' + beats.split('.')[1];
-      const userLine = 'by ' + u;
-      return { dateLine, userLine };
-    }
-
-    const stampStyle = 'color:#fff; padding:0 0.3em; font-size:0.85em; white-space:nowrap; display:inline-block;';
-
-    function createEntry(html, stamp) {
-      const contentHeight = parseInt(document.getElementById('content-area').style.height) || window.innerHeight;
-      const p = document.createElement('p');
-      p.style.height = contentHeight + 'px';
-      if (stamp) {
-        const dateSp = document.createElement('span');
-        dateSp.textContent = stamp.dateLine;
-        dateSp.style.cssText = stampStyle + ' background:#D9D9D9; color:#2e2829; margin-bottom:0.1em;';
-        const userSp = document.createElement('span');
-        userSp.textContent = stamp.userLine;
-        userSp.style.cssText = stampStyle + ' background:#838383; margin-bottom:0.25em;';
-        p.appendChild(dateSp);
-        p.appendChild(document.createTextNode('\n'));
-        p.appendChild(userSp);
-        p.appendChild(document.createTextNode('\n' + html));
-      } else {
-        p.innerHTML = html;
-      }
-      return p;
-    }
-
-    function submitEntry() {
-      const input = document.getElementById('entry-input');
-      const text = input.value.trim();
-      if (!text) return;
-      const entries = document.getElementById('entries');
-      const p = createEntry(text, makeStamp());
-      entries.appendChild(p);
-      input.value = '';
-      saveEntries();
-      adjustLayout();
-      scrollToEntry(p);
-    }
-
-    document.getElementById('entry-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) submitEntry();
-    });
-
-    function scrollToEntry(p) {
-      const area = document.getElementById('content-area');
-      const index = Array.from(document.querySelectorAll('#entries p')).indexOf(p);
-      area.scrollTop = index * area.offsetHeight;
-    }
-
-    function loadEntries() {
-      const saved = JSON.parse(localStorage.getItem('hourglass-entries') || '[]');
-      const entries = document.getElementById('entries');
-      saved.forEach(function(html) {
-        const p = createEntry(html);
-        entries.appendChild(p);
-      });
-      adjustLayout();
-      const last = entries.querySelector('p:last-child');
-      if (last) scrollToEntry(last);
-    }
-
-    function wipeEntries() {
-      if (!confirm('Wipe all entries?')) return;
-      localStorage.removeItem('hourglass-entries');
-      document.getElementById('entries').innerHTML = '';
-    }
-
-    function saveEntries() {
-      const entries = document.getElementById('entries');
-      const htmls = Array.from(entries.querySelectorAll('p')).map(p => p.innerHTML);
-      localStorage.setItem('hourglass-entries', JSON.stringify(htmls));
-    }
-
-    loadEntries();
-  </script>
-
-</body>
-</html>
+if (typeof ENTRIES_DATA !== 'undefined') {
+  renderEntries(ENTRIES_DATA);
+}
+</SCRIPT>
+</BODY>
+</HTML>
